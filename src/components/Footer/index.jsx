@@ -51,7 +51,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a href="https://near.org/" target="_blank" className="hover:text-white" rel="noreferrer">
-                  About NEAR{' '}
+                  About NEAR
                 </a>
               </li>
               <li>

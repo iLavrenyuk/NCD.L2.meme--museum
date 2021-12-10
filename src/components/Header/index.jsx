@@ -5,33 +5,33 @@ export const Header = ({ accountId }) => {
   return (
     <header id="header" className="relative header-bg">
       <img
-        src={require('../../assets/img/image272.png')}
+        src={require('../../assets/img/image272.png').default}
         alt="explode"
         className="hidden md:block absolute top-0 right-0"
       />
       <img
-        src={require('../../assets/img/image1342.png')}
+        src={require('../../assets/img/image1342.png').default}
         alt="trophy"
         className="hidden md:block absolute -bottom-12 left-0"
       />
       <img
-        src={require('../../assets/img/image1411.png')}
+        src={require('../../assets/img/image1411.png').default}
         alt="trophy"
         className="hidden md:block absolute -bottom-12 right-0"
       />
 
       <img
-        src={require('../../assets/img/Ellipse22.png')}
+        src={require('../../assets/img/Ellipse22.png').default}
         alt="lights"
         className="hidden md:block absolute left-0 top-16"
       />
       <img
-        src={require('../../assets/img/Ellipse24.png')}
+        src={require('../../assets/img/Ellipse24.png').default}
         alt="lights"
         className="hidden md:block absolute left-44 xl:left-96 top-0"
       />
       <img
-        src={require('../../assets/img/Ellipse21.png')}
+        src={require('../../assets/img/Ellipse21.png').default}
         alt="lights"
         className="hidden md:block absolute right-0 top-44"
       />
@@ -46,7 +46,11 @@ export const Header = ({ accountId }) => {
             className="flex"
             rel="noreferrer"
           >
-            <img src={require('../../assets/img/near_logo_stack_1.png')} alt="" className="border-r-2 border-white" />
+            <img
+              src={require('../../assets/img/near_logo_stack_1.png').default}
+              alt=""
+              className="border-r-2 border-white"
+            />
             <div className="ml-2">
               <p className="text-gradient-blue text-2xl font-bold tracking-tight">Memes</p>
               <p className="-mt-2 font-josefin text-white text-2xl">museum</p>
@@ -54,7 +58,7 @@ export const Header = ({ accountId }) => {
           </a>
           <div className="flex items-center space-x-3">
             <div className="flex items-center justify-center w-14 h-14 rounded-full bg-white">
-              <img src={require('../../assets/img/near_logo_stack2.png')} alt="" />
+              <img src={require('../../assets/img/near_logo_stack2.png').default} alt="" />
             </div>
 
             <div v-if="accountId">
@@ -74,7 +78,7 @@ export const Header = ({ accountId }) => {
           <div className="lg:mt-3 2xl:mt-14 text-center">
             <h1 className="flex justify-center items-baseline space-x-2 text-4xl lg:text-6xl 2xl:text-8xl text-white font-bold">
               <img
-                src={require('../../assets/img/image1123.png')}
+                src={require('../../assets/img/image1123.png').default}
                 alt="pig"
                 className="w-9 lg:w-20 h-9 lg:h-20 mr-3 -pb-4"
               />
