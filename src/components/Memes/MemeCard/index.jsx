@@ -1,13 +1,45 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { addComment, getMemeComments } from '../../../services/near';
 
-export const MemeCard = () => {
+export const MemeCard = ({
+  selectedMeme,
+  setSelectedMeme,
+  dateFormat,
+  match9gag,
+  contractId,
+  handleDonate,
+  handleVote,
+}) => {
+  const [comments, setComments] = useState([]);
+
+  const [inputComment, setInputComment] = useState([]);
+
+  const getComments = useCallback(async () => {
+    try {
+      setComments(await getMemeComments(selectedMeme.id));
+    } catch (error) {
+      console.log(error);
+    }
+  }, [selectedMeme]);
+
+  useEffect(() => {
+    getComments();
+  }, [getComments]);
+
+  const sendComment = () => {
+    addComment({
+      memeId: selectedMeme.id,
+      text: inputComment,
+    });
+  };
+
   return (
-    <Transition.Root as="template" show={false ?? 'modalOpen'}>
-      <Dialog as="div" className="fixed z-1000 inset-0 overflow-y-auto" onClose={() => `this.$emit('closeModal')`}>
+    <Transition.Root as="div" show={!!selectedMeme}>
+      <Dialog as="div" className="fixed z-1000 inset-0 overflow-y-auto" onClose={() => setSelectedMeme(null)}>
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
-            as="template"
+            as="div"
             enter="ease-out duration-300"
             enter-from="opacity-0"
             enter-to="opacity-100"
@@ -22,7 +54,7 @@ export const MemeCard = () => {
             &#8203;
           </span>
           <Transition.Child
-            as="template"
+            as="div"
             enter="ease-out duration-300"
             enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             enter-to="opacity-100 translate-y-0 sm:scale-100"
@@ -46,7 +78,7 @@ export const MemeCard = () => {
                     />
 
                     <div className="flex justify-end">
-                      <button click="this.$emit('closeModal')" className="mx-2">
+                      <button onClick={() => setSelectedMeme(null)} className="mx-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
                           <path
                             d="M24.9191 7.08331L16.9999 15.0025L9.08075 7.08331L7.08325 9.08081L15.0024 17L7.08325 24.9191L9.08075 26.9166L16.9999 18.9975L24.9191 26.9166L26.9166 24.9191L18.9974 17L26.9166 9.08081L24.9191 7.08331Z"
@@ -58,44 +90,46 @@ export const MemeCard = () => {
 
                     <div className="px-8">
                       <div className="flex items-center justify-between">
-                        <p className="text-gradient-pink text-xl md:text-3xl font-bold">{'meme.info.title'}</p>
-                        <p className="text-gray-400 text-xs md:text-sm">
-                          {`format(new Date(fromUnixTime(parseInt(meme.info.created_at.substring(0,10)))),"MMMM do yyyy")`}
-                        </p>
+                        <p className="text-gradient-pink text-xl md:text-3xl font-bold">{selectedMeme.title}</p>
+                        <p className="text-gray-400 text-xs md:text-sm">{dateFormat(selectedMeme.created_at)}</p>
                       </div>
 
                       <a className="text-gray-900 hover:underline text-sm md:text-base">
-                        {'meme.id'}.{'contractId'}.testnet
+                        {selectedMeme.id}.{contractId}.testnet
                       </a>
 
-                      <img src="meme.image" alt="meme.info.title" className="w-full mt-4 rounded-3xl" />
+                      <img
+                        src={match9gag(selectedMeme.data)}
+                        alt={selectedMeme.title}
+                        className="w-full mt-4 rounded-3xl"
+                      />
 
                       <div className="flex justify-between mt-9">
                         <div className="text-center">
                           <p className="text-black text-xl font-bold">donations</p>
                           <p className="text-gradient-pink font-bold text-2xl">
-                            {'meme.info.total_donations / 1e24'} Ⓝ
+                            {selectedMeme.total_donations / 1e24} Ⓝ
                           </p>
                         </div>
                         <div className="text-center">
                           <p className="text-black text-xl font-bold">category</p>
-                          <p className="text-gradient-pink font-bold text-2xl">{'meme.info.category'}</p>
+                          <p className="text-gradient-pink font-bold text-2xl">{selectedMeme.category}</p>
                         </div>
                         <div className="text-center">
                           <p className="text-black text-xl font-bold">score</p>
-                          <p className="text-gradient-pink font-bold text-2xl">{'meme.info.vote_score'}</p>
+                          <p className="text-gradient-pink font-bold text-2xl">{selectedMeme.vote_score}</p>
                         </div>
                       </div>
 
                       <div className="flex space-x-1 lg:space-x-2 mt-11">
                         <button
-                          click="donate({ memeId: meme.id, amount: '1'})"
+                          onClick={() => handleDonate(selectedMeme.id)}
                           className="mt-2 flex items-center justify-center w-1/2 border-2 border-white text-xs md:text-lg py-2 bg-gradient-to-r from-blue-500 hover:border-blue-600 to-blue-600 hover:text-blue-600 hover:from-white hover:to-white hover:shadow-xl text-white text-center font-bold rounded-md transform active:scale-95 duration-200"
                         >
                           Donate 1 Ⓝ
                         </button>
                         <button
-                          click="vote({ memeId: meme.id, value: 1 })"
+                          onClick={() => handleVote(selectedMeme.id, 1)}
                           className="flex items-center justify-center mt-2 py-3 text-blue-600 text-xs md:text-lg font-bold w-1/4 hover:bg-blue-600 hover:text-white rounded-md border-2 border-blue-600 transform active:scale-95 duration-200"
                         >
                           <svg
@@ -115,7 +149,7 @@ export const MemeCard = () => {
                         </button>
 
                         <button
-                          click="vote({ memeId: meme.id, value: -1 })"
+                          onClick={() => handleVote(selectedMeme.id, -1)}
                           className="flex items-center justify-center mt-2 py-3 text-red-500 text-xs md:text-lg font-bold w-1/4 hover:bg-red-500 hover:text-white rounded-md border-2 border-red-500 transform active:scale-95 duration-200"
                         >
                           <svg
@@ -158,7 +192,8 @@ export const MemeCard = () => {
                         <div className="flex">
                           <form>
                             <input
-                              v-model="comment"
+                              value={inputComment}
+                              onChange={(e) => setInputComment(e.target.value)}
                               type="comment"
                               name="comment"
                               id="comment"
@@ -167,7 +202,7 @@ export const MemeCard = () => {
                             />
                           </form>
                           <button
-                            click="handleSubmit"
+                            onClick={sendComment}
                             className="flex items-center justify-center mt-5 w-40 bg-gray-200 hover:bg-blue-200 rounded-r-2xl text-blue-600  font-bold transform active:scale-95 duration-100"
                           >
                             Send
@@ -176,22 +211,19 @@ export const MemeCard = () => {
                         </div>
                       </div>
 
-                      <div className="">
-                        <div
-                          v-for="comment in meme.comments"
-                          key="comment"
-                          className="mt-5 px-6 py-5 rounded-3xl w-full bg-gradient-pink text-white"
-                        >
-                          <div className="flex justify-between items-center">
-                            <a href="#" className="text-sm md:text-xl">
-                              {'comment.author'}
-                            </a>
-                            <p className="text-xs md:text-sm">
-                              {`format(new Date(fromUnixTime(parseInt(comment.created_at.substring(0, 10)))),"MMM do yyyy")`}
-                            </p>
+                      <div>
+                        {comments.map((comment) => (
+                          <div
+                            key={comment.created_at}
+                            className="mt-5 px-6 py-5 rounded-3xl w-full bg-gradient-pink text-white"
+                          >
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm md:text-xl">{comment.author}</span>
+                              <p className="text-xs md:text-sm">{dateFormat(comment.created_at)}</p>
+                            </div>
+                            <p className="text-lg w-full md:w-3/4 mt-2">{comment.text}</p>
                           </div>
-                          <p className="text-lg w-full md:w-3/4 mt-2">{'comment.text'}</p>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>

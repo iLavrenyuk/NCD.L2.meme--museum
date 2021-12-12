@@ -1,40 +1,51 @@
 import React from 'react';
 import { AddMemeForm } from './AddMemeForm';
+import { signIn, signOut } from '../../services/near';
 
-export const Header = ({ accountId }) => {
+export const Header = ({ accountId, setAccountId }) => {
+  const handleSignIn = () => {
+    signIn();
+  };
+
+  const handleSignOut = () => {
+    signOut();
+    setAccountId('');
+  };
   return (
     <header id="header" className="relative header-bg">
-      <img
-        src={require('../../assets/img/image272.png').default}
-        alt="explode"
-        className="hidden md:block absolute top-0 right-0"
-      />
-      <img
-        src={require('../../assets/img/image1342.png').default}
-        alt="trophy"
-        className="hidden md:block absolute -bottom-12 left-0"
-      />
-      <img
-        src={require('../../assets/img/image1411.png').default}
-        alt="trophy"
-        className="hidden md:block absolute -bottom-12 right-0"
-      />
+      <div className="pointer-events-none">
+        <img
+          src={require('../../assets/img/image272.png').default}
+          alt="explode"
+          className="hidden md:block absolute top-0 right-0"
+        />
+        <img
+          src={require('../../assets/img/image1342.png').default}
+          alt="trophy"
+          className="hidden md:block absolute -bottom-12 left-0"
+        />
+        <img
+          src={require('../../assets/img/image1411.png').default}
+          alt="trophy"
+          className="hidden md:block absolute -bottom-12 right-0"
+        />
 
-      <img
-        src={require('../../assets/img/Ellipse22.png').default}
-        alt="lights"
-        className="hidden md:block absolute left-0 top-16"
-      />
-      <img
-        src={require('../../assets/img/Ellipse24.png').default}
-        alt="lights"
-        className="hidden md:block absolute left-44 xl:left-96 top-0"
-      />
-      <img
-        src={require('../../assets/img/Ellipse21.png').default}
-        alt="lights"
-        className="hidden md:block absolute right-0 top-44"
-      />
+        <img
+          src={require('../../assets/img/Ellipse22.png').default}
+          alt="lights"
+          className="hidden md:block absolute left-0 top-16"
+        />
+        <img
+          src={require('../../assets/img/Ellipse24.png').default}
+          alt="lights"
+          className="hidden md:block absolute left-44 xl:left-96 top-0"
+        />
+        <img
+          src={require('../../assets/img/Ellipse21.png').default}
+          alt="lights"
+          className="hidden md:block absolute right-0 top-44"
+        />
+      </div>
 
       <div className="w-full h-3 bg-gradient-pink"></div>
 
@@ -61,16 +72,18 @@ export const Header = ({ accountId }) => {
               <img src={require('../../assets/img/near_logo_stack2.png').default} alt="" />
             </div>
 
-            <div v-if="accountId">
-              <p className="text-gradient-blue text-sm md:text-base">{'accountId'}</p>
-              <button click="signOut" className="text-white font-bold ml-3">
-                Log out
+            {accountId ? (
+              <>
+                <p className="text-gradient-blue text-sm md:text-base">{accountId}</p>
+                <button onClick={handleSignOut} className="text-white font-bold ml-3">
+                  Log out
+                </button>
+              </>
+            ) : (
+              <button onClick={handleSignIn} className="ml-4 text-white text-sm md:text-xl font-bold">
+                Log in with <span className="text-gradient-blue">NEAR Wallet</span>
               </button>
-            </div>
-
-            <button v-else click="signIn" className="ml-4 text-white text-sm md:text-xl font-bold">
-              Log in with <span className="text-gradient-blue">NEAR Wallet</span>
-            </button>
+            )}
           </div>
         </nav>
 
@@ -91,7 +104,7 @@ export const Header = ({ accountId }) => {
             </p>
           </div>
 
-          {accountId ? <AddMemeForm v-if="accountId" addMeme="addMeme" memes="memes" /> : null}
+          {accountId ? <AddMemeForm addMeme="addMeme" memes="memes" /> : null}
         </div>
       </div>
     </header>

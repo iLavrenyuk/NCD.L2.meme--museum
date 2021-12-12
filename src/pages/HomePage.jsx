@@ -1,23 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Memes } from '../components/Memes';
+import { useMemes } from '../hooks/useMemes';
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
+import { getAccountId } from '../services/near';
 
 export const HomePage = () => {
+  const [accountId, setAccountId] = useState('');
+  const [apiError, setApiError] = useState('');
+
+  const { memes } = useMemes({ apiError, setApiError });
+
+  useEffect(() => {
+    setAccountId(getAccountId() ?? '');
+  }, []);
+
   return (
     <>
-      <Header accountId="accountId" signIn="signIn" signOut="signOut" addMeme="addMeme" memes="memes" />
-
-      <Memes
-        accountId="accountId"
-        signIn="signIn"
-        memes="memes"
-        contractId="CONTRACT_ID"
-        addComment="addComment"
-        donate="donate"
-        vote="vote"
-      />
-
+      <Header accountId={accountId} setAccountId={setAccountId} />
+      <Memes accountId={accountId} memes={memes} />
       <Footer />
     </>
   );

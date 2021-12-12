@@ -1,38 +1,50 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { addMeme } from '../../../services/near';
+import { memeFormSchema } from '../../../validation';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { defaultValues, formFields } from '../../../constants/inputData';
 
 export const AddMemeForm = () => {
-  const { register, handleSubmit, watch, errors } = useForm();
+  const {
+    formState: { errors },
+    register,
+    handleSubmit,
+  } = useForm({
+    defaultValues,
+    resolver: yupResolver(memeFormSchema),
+    mode: 'onBlur',
+  });
 
-  const onSubmit = (data) => console.log(data);
-
-  console.log(watch());
-  console.log(register);
+  const onSubmit = (data) => {
+    addMeme(data);
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} validation-schema="schema" className="mt-14 w-full">
+    <form onSubmit={handleSubmit(onSubmit)} className="mt-14 w-full">
       <div className="flex flex-col lg:flex-row justify-center items-baseline lg:space-x-5">
-        <div v-for="field in formFields" key="field" className="mt-4 lg:mt-0">
-          <p htmlFor="field.id" className="text-gray-400 pl-4">
-            {'field.label'}
-          </p>
-          <input
-            // ref={register}
-            v-model="field.id"
-            type="text"
-            name="field.id"
-            id="field.id"
-            placeholder="field.label"
-            className="w-64 lg:w-44 xl:w-64 mt-2 py-3 rounded-md border-2 border-gray-900 focus:border-blue-600 outline-none pl-6"
-          />
-          {errors?.['field.id'] && <span className="w-64 text-red-500">This field is required</span>}
-        </div>
+        {formFields.map((field) => (
+          <div key={field.id} className="flex flex-col relative mt-4 lg:mt-0">
+            <p htmlFor={field.id} className="text-gray-400 pl-4">
+              {field.label}
+            </p>
+            <input
+              {...register(field.id)}
+              type="text"
+              id={field.id}
+              placeholder={field.label}
+              className="w-64 lg:w-44 xl:w-64 mt-2 py-3 rounded-md border-2 border-gray-900 focus:border-blue-600 outline-none pl-6"
+            />
+            {errors?.[field.id] && (
+              <span className="absolute -bottom-6 left-1 w-64 text-red-500">{errors?.[field.id]?.message}</span>
+            )}
+          </div>
+        ))}
 
         <div className="mt-4 lg:mt-0">
           <p className="text-gray-400 pl-4 lg:pl-0">Category</p>
           <select
-            // ref={register}
-            v-model="category"
+            {...register('category')}
             name="category"
             id="category"
             className="w-16 mt-2 py-3 rounded-md border-2 border-gray-900 focus:border-blue-600 outline-none px-3"
@@ -46,7 +58,10 @@ export const AddMemeForm = () => {
         </div>
         <div className="mt-4 lg:mt-0">
           <p className="hidden lg:block text-transparent">buttons</p>
-          <button className="inline-block mt-2 w-64 lg:w-44 xl:w-64 py-3 bg-gradient-to-r from-blue-500 hover:from-white active:from-gray-200 to-blue-600 hover:to-white active:to-gray-200 text-white hover:text-blue-600 text-center font-semibold rounded-md">
+          <button
+            type="submit"
+            className="inline-block mt-2 w-64 lg:w-44 xl:w-64 py-3 bg-gradient-to-r from-blue-500 hover:from-white active:from-gray-200 to-blue-600 hover:to-white active:to-gray-200 text-white hover:text-blue-600 text-center font-semibold rounded-md"
+          >
             Send
           </button>
         </div>

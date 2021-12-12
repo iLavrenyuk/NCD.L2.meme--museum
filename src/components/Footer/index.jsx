@@ -5,17 +5,17 @@ export const Footer = () => {
     <footer className="relative bg-gradient-pink text-white section-shadow">
       <img
         src={require('../../assets/img/image187.png').default}
-        alt
+        alt=""
         className="hidden md:block absolute -top-14 right-0"
       />
       <img
         src={require('../../assets/img/image228.png').default}
-        alt
+        alt=""
         className="hidden md:block absolute bottom-0 left-0"
       />
       <div className="container mx-auto px-6 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-5">
-          <div className>
+          <div>
             <a
               href="https://github.com/Learn-NEAR/NCD.L1.sample--meme-museum"
               target="_blank"
@@ -24,7 +24,7 @@ export const Footer = () => {
             >
               <img
                 src={require('../../assets/img/near_logo_stack_1.png').default}
-                alt
+                alt=""
                 className="border-r-2 border-white"
               />
               <div className="ml-2">
@@ -36,7 +36,7 @@ export const Footer = () => {
               alxndr.sai@gmail.com
             </a>
           </div>
-          <div className>
+          <div>
             <h5 className="text-2xl font-bold mt-2">About</h5>
             <ul className="mt-4 space-y-2 text-gray-200">
               <li>
@@ -66,7 +66,7 @@ export const Footer = () => {
               </li>
             </ul>
           </div>
-          <div className>
+          <div>
             <h5 className="text-2xl font-bold mt-2">Community</h5>
             <ul className="mt-4 space-y-2 text-gray-200">
               <li>
@@ -81,7 +81,7 @@ export const Footer = () => {
               </li>
             </ul>
           </div>
-          <div className>
+          <div>
             <h5 className="text-2xl font-bold mt-2">Education</h5>
             <ul className="mt-4 space-y-2 text-gray-200">
               <li>
