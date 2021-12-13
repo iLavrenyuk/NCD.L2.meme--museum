@@ -2,7 +2,7 @@ import React from 'react';
 import { AddMemeForm } from './AddMemeForm';
 import { signIn, signOut } from '../../services/near';
 
-export const Header = ({ accountId, setAccountId }) => {
+export const Header = ({ accountId, setAccountId, memeIds }) => {
   const handleSignIn = () => {
     signIn();
   };
@@ -104,7 +104,7 @@ export const Header = ({ accountId, setAccountId }) => {
             </p>
           </div>
 
-          {accountId ? <AddMemeForm addMeme="addMeme" memes="memes" /> : null}
+          {accountId ? <AddMemeForm memeIds={memeIds} /> : null}
         </div>
       </div>
     </header>

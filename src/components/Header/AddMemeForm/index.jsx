@@ -5,14 +5,14 @@ import { memeFormSchema } from '../../../validation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { defaultValues, formFields } from '../../../constants/inputData';
 
-export const AddMemeForm = () => {
+export const AddMemeForm = ({ memeIds }) => {
   const {
     formState: { errors },
     register,
     handleSubmit,
   } = useForm({
     defaultValues,
-    resolver: yupResolver(memeFormSchema),
+    resolver: yupResolver(memeFormSchema(memeIds)),
     mode: 'onBlur',
   });
 
@@ -36,7 +36,7 @@ export const AddMemeForm = () => {
               className="w-64 lg:w-44 xl:w-64 mt-2 py-3 rounded-md border-2 border-gray-900 focus:border-blue-600 outline-none pl-6"
             />
             {errors?.[field.id] && (
-              <span className="absolute -bottom-6 left-1 w-64 text-red-500">{errors?.[field.id]?.message}</span>
+              <span className="absolute top-20 left-1 w-64 text-red-500">{errors?.[field.id]?.message}</span>
             )}
           </div>
         ))}

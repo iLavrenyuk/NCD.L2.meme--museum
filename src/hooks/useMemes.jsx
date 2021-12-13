@@ -3,17 +3,19 @@ import { useState, useCallback, useEffect } from 'react';
 
 export const useMemes = ({ setApiError }) => {
   const [memes, setMemes] = useState([]);
+  const [memeIds, setMemeIds] = useState([]);
 
   const updateValues = useCallback(async () => {
     try {
-      const memeIds = await getMemes();
-      const data = await Promise.all(
-        memeIds.reverse().map(async (id) => {
+      const memeIdsData = await getMemes();
+      setMemeIds(memeIdsData);
+      const memesData = await Promise.all(
+        memeIdsData.reverse().map(async (id) => {
           const memeData = await getMeme(id);
           return { ...memeData, id };
         })
       );
-      setMemes(data);
+      setMemes(memesData);
     } catch (error) {
       setApiError(error);
     }
@@ -26,5 +28,6 @@ export const useMemes = ({ setApiError }) => {
 
   return {
     memes,
+    memeIds,
   };
 };

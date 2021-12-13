@@ -9,7 +9,7 @@ export const HomePage = () => {
   const [accountId, setAccountId] = useState('');
   const [apiError, setApiError] = useState('');
 
-  const { memes } = useMemes({ apiError, setApiError });
+  const { memes, memeIds } = useMemes({ apiError, setApiError });
 
   useEffect(() => {
     setAccountId(getAccountId() ?? '');
@@ -17,7 +17,7 @@ export const HomePage = () => {
 
   return (
     <>
-      <Header accountId={accountId} setAccountId={setAccountId} />
+      <Header memeIds={memeIds} accountId={accountId} setAccountId={setAccountId} />
       <Memes accountId={accountId} memes={memes} />
       <Footer />
     </>
