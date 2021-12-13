@@ -7,9 +7,8 @@ import { getAccountId } from '../services/near';
 
 export const HomePage = () => {
   const [accountId, setAccountId] = useState('');
-  const [apiError, setApiError] = useState('');
 
-  const { memes, memeIds } = useMemes({ apiError, setApiError });
+  const { memes, memeIds } = useMemes();
 
   useEffect(() => {
     setAccountId(getAccountId() ?? '');

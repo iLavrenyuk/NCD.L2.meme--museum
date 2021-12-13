@@ -8,13 +8,18 @@ export const ContractProvider = ({ children }) => {
   !contractId && localStorage.setItem('CONTRACT_ID', defaultContractId);
 
   const [data, setData] = useState(contractId ?? defaultContractId);
+  const [apiError, setApiError] = useState(false);
 
   const setContractId = (contractId) => {
     localStorage.setItem('CONTRACT_ID', contractId);
     setData(contractId);
   };
 
-  return <DataContext.Provider value={{ contractId: data, setContractId }}>{children}</DataContext.Provider>;
+  return (
+    <DataContext.Provider value={{ contractId: data, setContractId, apiError, setApiError }}>
+      {children}
+    </DataContext.Provider>
+  );
 };
 
 export const useContract = () => useContext(DataContext);

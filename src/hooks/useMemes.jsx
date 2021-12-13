@@ -1,7 +1,10 @@
 import { getMemes, getMeme } from '../services/near';
 import { useState, useCallback, useEffect } from 'react';
+import { useContract } from '../context/ContractProvider';
 
-export const useMemes = ({ setApiError }) => {
+export const useMemes = () => {
+  const { contractId, setApiError } = useContract();
+
   const [memes, setMemes] = useState([]);
   const [memeIds, setMemeIds] = useState([]);
 
@@ -20,7 +23,7 @@ export const useMemes = ({ setApiError }) => {
       setApiError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [contractId]);
 
   useEffect(() => {
     updateValues();
